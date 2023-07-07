@@ -6,7 +6,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float jumpHeight;
     private Rigidbody2D body;
     private Animator animator;
-    private bool grounded;
+    private bool grounded = false;
 
     private void Awake()
     {
@@ -58,6 +58,14 @@ public class Movement : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             grounded = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            grounded = false;
         }
     }
 }
