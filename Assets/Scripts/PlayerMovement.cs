@@ -62,7 +62,6 @@ public class Movement : MonoBehaviour
             stoppedJumping = false;
             jumpTimeCounter = jumpTime;
             jumpCounter -= grounded ? 0 : 1;
-            animator.SetTrigger("Jump");
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
