@@ -18,7 +18,11 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y);
+        float horizontalInput = Input.GetAxis("Horizontal");
+        body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+
+        // Flip player sprite depending on input
+        transform.localScale = horizontalInput > 0.01f ? new Vector3(4, 4, 1) : new Vector3(-4, 4, 1);
 
         if (Input.GetKey(KeyCode.Space))
         {
