@@ -5,10 +5,10 @@ public class Movement : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float maxJumpSpeed;
     [SerializeField] private float maxFallSpeed;
-    //[SerializeField] private float jumpHeight;
     [SerializeField] private float jumpForce;
     [SerializeField] private float jumpTime;
     [SerializeField] private int jumpCount;
+    [SerializeField] private bool autoJump;
     private float jumpTimeCounter;
     private int jumpCounter;
     private bool grounded = false;
@@ -51,12 +51,14 @@ public class Movement : MonoBehaviour
         animator.SetBool("Running", horizontalInput != 0);
         animator.SetBool("Grounded", grounded);
 
-        if (grounded)
+        // Reset jump stats when grounded
+        if (grounded && (!Input.GetKey(KeyCode.Space) || autoJump))
         {
             jumpCounter = jumpCount;
             jumpTimeCounter = jumpTime;
         }
 
+        // Jump when either grounded or if you have a double jump stored
         if (Input.GetKeyDown(KeyCode.Space) && stoppedJumping && jumpCounter > 0)
         {
             stoppedJumping = false;
@@ -65,6 +67,7 @@ public class Movement : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
+            // Stop jumping force
             jumpTimeCounter = 0;
             stoppedJumping = true;
         }
@@ -72,43 +75,20 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        //// If spacebar is let go
-        //if (Input.GetKeyUp(KeyCode.Space))
-        //{
-        //    // Stop jumping and set jump counter to zero. Counter will reset once grounded.
-        //    jumpTimeCounter = 0;
-        //    stoppedJumping = true;
-        //}
-
-        //// If pressing space and have jumps left
-        //if (Input.GetKeyDown(KeyCode.Space) && stoppedJumping && jumpCounter > 0)
-        //{
-        //    body.velocity = new Vector2(body.velocity.x, jumpForce);
-        //    stoppedJumping = false;
-        //    jumpTimeCounter = jumpTime;
-        //    jumpCounter--;
-        //    animator.SetTrigger("Jump");
-        //}
-
-        //// If holding space while jumping and jumping time not yet reached
-        //if (Input.GetKey(KeyCode.Space) && !stoppedJumping && jumpTimeCounter > 0) 
-        //{
-        //    body.velocity = new Vector2(body.velocity.x, jumpForce);
-        //    jumpTimeCounter -= Time.deltaTime;
-        //}
-
+        // Apply jumping force so long as timer is greater than 0 and space is held down
         if (!stoppedJumping && jumpTimeCounter > 0)
         {
             body.velocity = new Vector2(body.velocity.x, jumpForce);
             jumpTimeCounter -= Time.deltaTime;
         }
 
+        // Limit vertical velocity according to parameters
         body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -maxFallSpeed, maxJumpSpeed));
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Ground")
+        if (collision.gameObject.CompareTag("Ground"))
         {
             grounded = true;
         }
@@ -116,7 +96,7 @@ public class Movement : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Ground")
+        if (collision.gameObject.CompareTag("Ground"))
         {
             grounded = false;
         }
