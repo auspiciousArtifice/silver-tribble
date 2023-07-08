@@ -172,12 +172,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa933eb11ce15a248bac099ed8d700b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpCount: 1
+  dashCount: 1
   speed: 10
   maxJumpSpeed: 10
   maxFallSpeed: 14
+  dashSpeed: 16
   jumpForce: 12
   jumpTime: 0.2
-  jumpCount: 1
+  dashTime: 0.15
+  autoJump: 0
 --- !u!95 &3061009380639924427
 Animator:
   serializedVersion: 5
