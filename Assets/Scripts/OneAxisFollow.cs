@@ -20,5 +20,5 @@ public class OneAxisFollow : MonoBehaviour
 
 enum Axis
 {
-    X, Y, Z
+    X, Y
 }

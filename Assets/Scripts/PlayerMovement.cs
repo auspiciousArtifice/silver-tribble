@@ -147,6 +147,7 @@ public class Movement : MonoBehaviour
         // Reset dash when touching ground
         if (isGrounded())
         {
+            stoppedDashing = true;
             dashTimeCounter = dashTime;
             dashCounter = dashCount;
         }
