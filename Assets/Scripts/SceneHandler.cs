@@ -1,28 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    public static void Load(string sceneName){
+        SceneManager.LoadScene(sceneName);
+        unpause();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public static void unpause(){
+        Time.timeScale = 1;
     }
 
-    public void StartGame()
-    {
-        Debug.Log("Started Game");
-    }
-
-    public void ExitGame()
-    {
-        Debug.Log("Ended Game");
+    public static void Exit(){
+        Application.Quit();
+        Debug.Log("Game quit successfully.");
     }
 }
