@@ -174,9 +174,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   maxJumpSpeed: 10
-  maxFallSpeed: 12
-  jumpForce: 10
-  jumpTime: 0.25
+  maxFallSpeed: 14
+  jumpForce: 12
+  jumpTime: 0.2
+  jumpCount: 1
 --- !u!95 &3061009380639924427
 Animator:
   serializedVersion: 5
