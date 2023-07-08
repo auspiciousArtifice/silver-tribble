@@ -62,6 +62,8 @@ public class Movement : MonoBehaviour
         // Set animator params
         animator.SetBool("Running", Input.GetAxis("Horizontal") != 0);
         animator.SetBool("Grounded", grounded);
+        animator.SetBool("Rising", body.velocity.y > 0);
+        animator.SetBool("Falling", body.velocity.y < 0);
 
         JumpLogic();
         DashLogic();
@@ -132,13 +134,16 @@ public class Movement : MonoBehaviour
             stoppedJumping = false;
             jumpTimeCounter = jumpTime;
             jumpCounter -= grounded ? 0 : 1;    // Jump from the ground doesn't decrement jumpCounter since you want to keep a jump for when you walk off a ledge
+            if (!grounded)
+            {
+                animator.SetTrigger("DoubleJump");
+            }
             StopDash();                         // Re-engage gravity but keep dash momentum
         }
-        else if (Input.GetKeyUp(KeyCode.Space))
+        else if (Input.GetKeyUp(KeyCode.Space) || !stoppedJumping && jumpTimeCounter <= 0)
         {
             // Stop jumping force
-            jumpTimeCounter = 0;
-            stoppedJumping = true;
+            StopJump();
         }
     }
 
@@ -154,7 +159,6 @@ public class Movement : MonoBehaviour
         // Dash when in the air, not currently dashing, and dash is available
         if (Input.GetKeyDown(KeyCode.LeftShift) && !grounded && stoppedDashing && dashCounter > 0)
         {
-            Debug.Log("Pressed Shift!");
             stoppedDashing = false;
             dashCounter--;
             dashTimeCounter = dashTime;
