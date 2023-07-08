@@ -22,12 +22,11 @@ public class Movement : MonoBehaviour
     private float gravScale;
     private int jumpCounter;
     private int dashCounter;
-    private bool grounded = false;
     private bool stoppedJumping;
     private bool stoppedDashing;
     private Rigidbody2D body;
     private Animator animator;
-    private BoxCollider2D collider;
+    private BoxCollider2D boxCollider;
 
 
     private void Awake()
@@ -35,7 +34,7 @@ public class Movement : MonoBehaviour
         // Get refs for rigidbody and animator
         body = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        collider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
         // Save gravity scale, so it isn't hardcoded everywhere!
         gravScale = body.gravityScale;
     }
@@ -66,8 +65,7 @@ public class Movement : MonoBehaviour
         // Set animator params
         animator.SetBool("Running", Input.GetAxis("Horizontal") != 0);
         animator.SetBool("Grounded", isGrounded());
-        animator.SetBool("Rising", body.velocity.y > 0);
-        animator.SetBool("Falling", body.velocity.y < 0);
+        animator.SetBool("Rising", body.velocity.y >= 0);
 
         JumpLogic();
         DashLogic();
@@ -111,13 +109,6 @@ public class Movement : MonoBehaviour
             body.velocity = new Vector2(dashSpeed * xDirection, 0);
             dashTimeCounter -= Time.deltaTime;
         }
-
-        //// Limit horizontal velocity if stopped dashing and trying to move horizontally
-        
-        //if (stoppedDashing && opposingDirections)
-        //{
-        //    body.AddForce(new Vector2(horizontalInput * speed / 4, 0));
-        //}
         
         // Limit vertical velocity according to parameters
         body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -maxFallSpeed, maxJumpSpeed));
@@ -207,13 +198,13 @@ public class Movement : MonoBehaviour
 
     private bool isGrounded()
     {
-        RaycastHit2D hit = Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return hit.collider != null;
     }
 
     private bool onWall()
     {
-        RaycastHit2D hit = Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
+        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
         return hit.collider != null;
     }
 
