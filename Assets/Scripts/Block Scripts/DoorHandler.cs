@@ -15,6 +15,7 @@ public class DoorHandler : MonoBehaviour
         else if(i == 2){
             player.GetComponent<Movement>().dashCount--;
         }
+        GameObject.FindWithTag("Respawn").transform.position = transform.position;
         doorScreen.SetActive(false);
         door.SetActive(false);
         Time.timeScale = 1;
