@@ -7,6 +7,8 @@ public class Movement : MonoBehaviour
     public int jumpCount;
     public int dashCount;
 
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
     [SerializeField] private float speed;
     [SerializeField] private float maxJumpSpeed;
     [SerializeField] private float maxFallSpeed;
@@ -25,6 +27,7 @@ public class Movement : MonoBehaviour
     private bool stoppedDashing;
     private Rigidbody2D body;
     private Animator animator;
+    private BoxCollider2D collider;
 
 
     private void Awake()
@@ -32,6 +35,7 @@ public class Movement : MonoBehaviour
         // Get refs for rigidbody and animator
         body = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        collider = GetComponent<BoxCollider2D>();
         // Save gravity scale, so it isn't hardcoded everywhere!
         gravScale = body.gravityScale;
     }
@@ -61,7 +65,7 @@ public class Movement : MonoBehaviour
 
         // Set animator params
         animator.SetBool("Running", Input.GetAxis("Horizontal") != 0);
-        animator.SetBool("Grounded", grounded);
+        animator.SetBool("Grounded", isGrounded());
         animator.SetBool("Rising", body.velocity.y > 0);
         animator.SetBool("Falling", body.velocity.y < 0);
 
@@ -122,19 +126,19 @@ public class Movement : MonoBehaviour
     private void JumpLogic()
     {
         // Reset jump stats when grounded
-        if (grounded && (!Input.GetKey(KeyCode.Space) || autoJump))
+        if (isGrounded() && (!Input.GetKey(KeyCode.Space) || autoJump))
         {
             jumpCounter = jumpCount;
             jumpTimeCounter = jumpTime;
         }
 
         // Jump when either grounded or if you have a double jump stored
-        if (Input.GetKeyDown(KeyCode.Space) && stoppedJumping && (grounded || jumpCounter > 0))
+        if (Input.GetKeyDown(KeyCode.Space) && stoppedJumping && (isGrounded() || jumpCounter > 0))
         {
             stoppedJumping = false;
             jumpTimeCounter = jumpTime;
-            jumpCounter -= grounded ? 0 : 1;    // Jump from the ground doesn't decrement jumpCounter since you want to keep a jump for when you walk off a ledge
-            if (!grounded)
+            jumpCounter -= isGrounded() ? 0 : 1;    // Jump from the ground doesn't decrement jumpCounter since you want to keep a jump for when you walk off a ledge
+            if (!isGrounded())
             {
                 animator.SetTrigger("DoubleJump");
             }
@@ -150,14 +154,14 @@ public class Movement : MonoBehaviour
     private void DashLogic()
     {
         // Reset dash when touching ground
-        if (grounded)
+        if (isGrounded())
         {
             dashTimeCounter = dashTime;
             dashCounter = dashCount;
         }
 
         // Dash when in the air, not currently dashing, and dash is available
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !grounded && stoppedDashing && dashCounter > 0)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isGrounded() && stoppedDashing && dashCounter > 0)
         {
             stoppedDashing = false;
             dashCounter--;
@@ -185,20 +189,32 @@ public class Movement : MonoBehaviour
         body.gravityScale = gravScale;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Ground"))
+    //    {
+    //        grounded = true;
+    //    }
+    //}
+
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Ground"))
+    //    {
+    //        grounded = false;
+    //    }
+    //}
+
+    private bool isGrounded()
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            grounded = true;
-        }
+        RaycastHit2D hit = Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        return hit.collider != null;
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private bool onWall()
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            grounded = false;
-        }
+        RaycastHit2D hit = Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
+        return hit.collider != null;
     }
 
     private float MaximumMagnitude(float a, float b)
