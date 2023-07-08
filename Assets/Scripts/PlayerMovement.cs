@@ -129,7 +129,7 @@ public class Movement : MonoBehaviour
         }
 
         // Jump when either grounded or if you have a double jump stored
-        if (Input.GetKeyDown(KeyCode.Space) && stoppedJumping && jumpCounter > 0)
+        if (Input.GetKeyDown(KeyCode.Space) && stoppedJumping && (grounded || jumpCounter > 0))
         {
             stoppedJumping = false;
             jumpTimeCounter = jumpTime;
