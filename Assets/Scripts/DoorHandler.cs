@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class DoorHandler : MonoBehaviour
 {
-    public GameObject doorScreen;
-    public GameObject door;
+    private GameObject door;
+
+    public void setDoor(GameObject d){
+        door = d;
+    }
+
+    void Start(){
+        gameObject.SetActive(false);
+    }
 
     public void openDoor(int i){
         if(i == 1){
@@ -14,17 +21,10 @@ public class DoorHandler : MonoBehaviour
         else if(i == 2){
             GameObject.FindWithTag("Player").GetComponent<Movement>().dashCount--;
         }
-        GameObject.FindWithTag("Respawn").transform.position = transform.position;
-        doorScreen.SetActive(false);
+        GameObject.FindWithTag("Respawn").transform.position = door.transform.GetChild(1).position;
         door.SetActive(false);
         gameObject.SetActive(false);
         Time.timeScale = 1;
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.tag == "Player") {
-            Time.timeScale = 0;
-            doorScreen.SetActive(true);
-        }
-    }
 }

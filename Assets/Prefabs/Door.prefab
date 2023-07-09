@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 21634102835114904}
   - component: {fileID: 5856974390449915913}
   - component: {fileID: 6312197528439607021}
-  - component: {fileID: 8817201276080124186}
+  - component: {fileID: 7757617622525503426}
   m_Layer: 0
   m_Name: DoorSwitch
   m_TagString: Untagged
@@ -131,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.625, y: 0.625}
   m_EdgeRadius: 0
---- !u!114 &8817201276080124186
+--- !u!114 &7757617622525503426
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,12 +140,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1993850235667551747}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ecf96359a8b5d4a9256e450a360fd7, type: 3}
+  m_Script: {fileID: 11500000, guid: 225ec425498115c4695c0b34098d01eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   doorScreen: {fileID: 0}
-  player: {fileID: 0}
-  door: {fileID: 8989084487803009240}
 --- !u!1 &5476502658520823796
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,10 +261,5 @@ PrefabInstance:
 --- !u!4 &2213215932938653333 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6925197249041028673, guid: 63505f61569598848b24c7def86edd06, type: 3}
-  m_PrefabInstance: {fileID: 9128183049707673812}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8989084487803009240 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 149312210138144780, guid: 63505f61569598848b24c7def86edd06, type: 3}
   m_PrefabInstance: {fileID: 9128183049707673812}
   m_PrefabAsset: {fileID: 0}
