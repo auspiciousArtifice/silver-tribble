@@ -119,8 +119,8 @@ public class Movement : MonoBehaviour
         // Reset jump stats when grounded
         if (isGrounded() && (!Input.GetKey(KeyCode.Space) || autoJump))
         {
+            StopJump();
             jumpCounter = jumpCount;
-            jumpTimeCounter = jumpTime;
         }
 
         // Jump when either grounded or if you have a double jump stored
@@ -147,8 +147,7 @@ public class Movement : MonoBehaviour
         // Reset dash when touching ground
         if (isGrounded())
         {
-            stoppedDashing = true;
-            dashTimeCounter = dashTime;
+            StopDash();
             dashCounter = dashCount;
         }
 
