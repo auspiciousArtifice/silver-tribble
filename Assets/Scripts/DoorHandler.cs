@@ -15,11 +15,12 @@ public class DoorHandler : MonoBehaviour
     }
 
     public void openDoor(int i){
+        GameObject player = GameObject.FindWithTag("Player");
         if(i == 1){
-            GameObject.FindWithTag("Player").GetComponent<Movement>().jumpCount--;
+            player.GetComponent<Movement>().jumpCount--;
         }
         else if(i == 2){
-            GameObject.FindWithTag("Player").GetComponent<Movement>().dashCount--;
+            player.GetComponent<Movement>().dashCount--;
         }
         GameObject.FindWithTag("Respawn").transform.position = door.transform.GetChild(1).position;
         door.SetActive(false);

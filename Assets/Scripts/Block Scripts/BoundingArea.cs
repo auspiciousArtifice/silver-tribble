@@ -7,22 +7,11 @@ public class BoundingArea : MonoBehaviour
     // Start is called before the first frame update
     public Vector2 SpawnPoint;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerExit2D(Collider2D other) {
         if(other.gameObject.tag == "Player") {
-            other.gameObject.transform.position = SpawnPoint;
+            GameObject respawnPoint = GameObject.FindWithTag("Respawn");
+            other.gameObject.transform.position = ((respawnPoint != null) ? respawnPoint.transform.position : new Vector2(0,1));
             other.attachedRigidbody.velocity = Vector2.zero;
-            //other.attachedRigidbody.angularVelocity = 0;
         }
     }
 }

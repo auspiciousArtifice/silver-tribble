@@ -16,6 +16,15 @@ public class Door : MonoBehaviour
 
             doorScreen.SetActive(true);
             doorScreen.GetComponent<DoorHandler>().setDoor(gameObject.transform.parent.gameObject);
+
+            Movement m = other.gameObject.GetComponent<Movement>();
+            if(m.jumpCount <= 0){
+                doorScreen.transform.GetChild(1).gameObject.SetActive(false);
+            }
+            if(m.dashCount <=0){
+                doorScreen.transform.GetChild(2).gameObject.SetActive(false);
+            }
+
         }
     }
 }
